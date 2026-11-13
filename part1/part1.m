@@ -2,33 +2,20 @@
 %% ENGS 93 Homework - Part 1
 % Descriptive Statistics and Normal Probability Distributions
 % Dataset: Engineering Salaries 2021
-%
-% This analysis introduces the dataset, summarizes its variables,
-% examines the distribution of engineering salaries, and estimates
-% probabilities using a fitted Normal distribution.
 
 clear;
 clc;
 close all;
 
-
-%% Question 1: Importing and Summarizing the Dataset
 %
-% The Engineering Salaries 2021 dataset contains 10,000 observations
-% and 18 variables. Each observation represents an engineering salary
-% record with information about compensation, professional experience,
-% employment characteristics, and demographic attributes.
-%
-% The dataset contains both numerical and categorical variables,
-% satisfying the requirements of the assignment. We import the data
-% as a MATLAB table, preserving the original column headers, and
-% examine the observed range or categories of every variable.
 
+project_root = pwd;
 
-% the script's location provides a consistent reference to the
-% project directory, regardless of each team member's computer.
-script_dir = fileparts(mfilename('fullpath'));
-project_root = fileparts(script_dir);
+% the parent directory is used when matlab starts inside part1.
+if strcmp(string(project_root), string(fullfile( ...
+        '/Users/ritisingh/Desktop/engs93_homework', 'part1')))
+    project_root = fileparts(project_root);
+end
 
 % the dataset is stored in a shared folder at the repository root.
 data_path = fullfile(project_root, 'data', ...
@@ -52,16 +39,6 @@ num_variables = width(data);
 fprintf('\nNumber of observations: %d\n', num_observations);
 fprintf('Number of variables: %d\n', num_variables);
 
-
-%% Question 1: Variable Ranges and Categories
-%
-% For numerical variables, the observed range is defined by the
-% minimum and maximum values. Categorical variables do not have
-% meaningful numerical ranges, so their distinct categories are
-% reported instead.
-%
-% Submission dates are handled separately because they represent
-% a chronological interval rather than a continuous measurement.
 
 
 % the original variable names allow each column to be inspected
@@ -128,50 +105,6 @@ for i = 1:num_variables
 end
 
 
-%% Question 1: Interpretation
-%
-% The dataset contains 10,000 observations and 18 variables, meeting
-% the assignment's requirements for sample size and variable diversity.
-%
-% The numerical variables include base salary, annual bonus, annual
-% stock value, total annual compensation, years of professional
-% experience, and years at the current company. The dataset also
-% includes identifiers and sample-frequency counts, which are
-% numerical but should not be treated as continuous measurements.
-%
-% Base salary ranges from $4,000 to $893,000, and total annual
-% compensation ranges from $10,000 to $2,372,000. Annual bonuses
-% range from $0 to $420,000, while annual stock values range from
-% $0 to $900,000.
-%
-% Years of professional experience and years at the current company
-% both range from 0 to 40 years. The submission dates extend from
-% January 1, 2021, through August 17, 2021.
-%
-% The categorical variables include company, engineering role,
-% company job level, specialization, location, education, and gender.
-% These variables describe differences among the salary records
-% rather than quantities with minimum and maximum numerical values.
-%
-% The observed ranges indicate considerable variation in compensation
-% and professional experience. This variation makes the dataset useful
-% for investigating distributions and applying statistical methods.
-
-
-%% Question 2: Descriptive Statistics
-%
-% We selected base salary and years of professional experience for
-% our descriptive statistical analysis.
-%
-% Base salary represents reported annual salary excluding additional
-% compensation such as bonuses and stock awards. Years of experience
-% measures the reported professional tenure of an engineer.
-%
-% For each variable, we estimate the mean and sample standard
-% deviation. The mean describes central tendency, while the standard
-% deviation describes the typical spread around the mean.
-
-
 % the two selected variables are stored separately for clarity.
 salary = data.base_salary;
 experience = data.years_of_experience;
@@ -198,38 +131,6 @@ fprintf('  standard deviation: $%.2f\n', salary_std);
 fprintf('\nYears of experience:\n');
 fprintf('  mean: %.4f years\n', experience_mean);
 fprintf('  standard deviation: %.4f years\n', experience_std);
-
-
-%% Question 2: Interpretation of Descriptive Statistics
-%
-% The average base salary in the dataset is $135,574.20, with a
-% sample standard deviation of $60,185.29. This relatively large
-% standard deviation indicates substantial variability in base
-% compensation among the engineering salary records.
-%
-% The average years of professional experience is 6.7062 years,
-% with a sample standard deviation of 5.5657 years. The substantial
-% variation in experience suggests that the dataset includes
-% individuals at different stages of their engineering careers.
-%
-% These statistics describe the center and variability of the
-% observed data. However, the mean and standard deviation alone
-% do not indicate whether a variable is Normally distributed.
-% We examine the distribution graphically in the next section.
-
-
-%% Question 2: Normalized Histogram and Normal Density
-%
-% We examine the distribution of annual base salary using a
-% probability-density-normalized histogram.
-%
-% Unlike a frequency histogram, a density-normalized histogram
-% is scaled so that its total area equals one. This allows a direct
-% comparison with a continuous probability density function.
-%
-% We construct a Normal distribution using the observed sample mean
-% and sample standard deviation. A close match between the histogram
-% and the fitted curve would suggest approximate Normality.
 
 
 % a finely spaced salary vector produces a smooth density curve.
@@ -265,28 +166,6 @@ grid on;
 hold off;
 
 
-%% Question 2: Assessment of Normality
-%
-% The observed salary distribution is not approximately symmetric
-% and bell-shaped. Instead, it exhibits positive skewness, with
-% higher salary observations extending the right tail.
-%
-% The Normal density curve provides a reasonable approximation
-% near the central portion of the distribution, but it does not
-% fully capture the asymmetry or the unusually high salaries.
-%
-% Therefore, annual base salary is not well described by an exact
-% Normal distribution. The fitted Normal model can still be used
-% as an approximation, but the limitations of this assumption
-% should be considered when interpreting probability estimates,
-% especially in the tails.
-
-
-%% Question 2: Figure Export
-%
-% The completed histogram is saved separately so that it can be
-% included in the team's final report or reviewed outside MATLAB.
-
 
 % the output path is shared across the project.
 results_dir = fullfile(project_root, 'results', 'figures');
@@ -298,18 +177,6 @@ end
 saveas(fig_salary, ...
     fullfile(results_dir, 'part1_salary_histogram.png'));
 
-
-%% Question 3: Normal Probability Calculations
-%
-% We use the fitted Normal distribution to estimate the proportion
-% of engineering salaries below a selected threshold of $150,000.
-%
-% The threshold is standardized using the observed salary mean and
-% standard deviation. The resulting z-score indicates how many
-% standard deviations the selected salary lies above the mean.
-%
-% The cumulative Normal distribution then gives the probability
-% that a salary is below the selected threshold.
 
 
 % the salary threshold is an illustrative value within the
@@ -346,38 +213,6 @@ fprintf('Observed proportion below threshold: %.4f\n', ...
     observed_proportion);
 
 
-%% Question 3: Interpretation of Salary Probability
-%
-% Using the fitted Normal distribution, the probability that an
-% engineering base salary is below $150,000 is approximately
-% 0.5947, or 59.47%.
-%
-% The corresponding probability above $150,000 is approximately
-% 0.4053, or 40.53%.
-%
-% In the observed dataset, 59.92% of salary records fall below
-% $150,000. The difference between the theoretical estimate and
-% the observed proportion is approximately 0.45 percentage points.
-%
-% This relatively small difference suggests that the fitted Normal
-% model approximates the observed probability reasonably well at
-% the selected threshold. However, agreement at one threshold does
-% not imply that the entire distribution is Normally distributed.
-%
-% In particular, the positive skewness observed in Question 2
-% indicates that the model may be less accurate for extreme salaries.
-
-
-%% Question 3: Additional Probability for Experience
-%
-% For comparison, we also estimate the probability that reported
-% professional experience is below 10 years using a Normal
-% distribution fitted to the experience variable.
-%
-% This second calculation follows the same method as the salary
-% calculation and demonstrates how the procedure applies to
-% another numerical variable.
-
 
 % the experience threshold is selected within the observed range.
 experience_threshold = 10;
@@ -401,38 +236,5 @@ fprintf('P(experience < %.0f years): %.4f\n', ...
 
 fprintf('Observed proportion: %.4f\n', experience_observed);
 
-
-%% Question 3: Interpretation of Experience Probability
-%
-% The fitted Normal distribution estimates that approximately
-% 72.30% of the observations have fewer than 10 years of
-% professional experience.
-%
-% The actual observed proportion is 74.18%. The model therefore
-% underestimates the observed proportion by approximately
-% 1.88 percentage points.
-%
-% As with salary, this difference reflects the limitations of
-% representing the empirical distribution with a fitted Normal
-% model. The model-based probabilities are approximations rather
-% than exact descriptions of the observed data.
-
-
-%% Part 1: Conclusion
-%
-% Part 1 established an initial statistical understanding of the
-% Engineering Salaries 2021 dataset.
-%
-% The descriptive statistics reveal substantial variation in
-% annual base salary and professional experience. The histogram
-% shows that base salary is positively skewed rather than
-% approximately Normal.
-%
-% Although the fitted Normal model does not reproduce the entire
-% salary distribution, it provides a useful approximation for
-% estimating probabilities at selected thresholds.
-%
-% These findings provide a foundation for the confidence interval
-% estimation and hypothesis testing conducted in Part 2.
 
 fprintf('\nPart 1 analysis complete.\n');
